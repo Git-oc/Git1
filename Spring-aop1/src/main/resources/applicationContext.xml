@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+       <bean id="bookDAO" class="Impl.BookDaoImpl"/>
+       <bean id="studentDAO" class="Impl.StudentDAOImpl"/>
+       
+       <bean id="txManager" class="utils.TxManager"/>
+       <bean id="logManager" class="utils.LogManager"/>
+       <aop:config>
+            <!--声明切入点-->
+            <aop:pointcut id="book_all" expression="execution(* Impl.*.*(..))"/>
+            <!--声明txManager为切面类-->
+            <aop:aspect ref="txManager">
+                <aop:before method="begin" pointcut-ref="book_all"/>
+                <aop:after method="commit" pointcut-ref="book_all"/>
+            </aop:aspect>
+
+            <aop:aspect ref="logManager">
+                <aop:before method="printLog" pointcut-ref="book_all"/>
+            </aop:aspect>
+
+       </aop:config>
+
+</beans>

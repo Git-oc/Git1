@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+                        <!--set注入-->
+    <!-- <bean id="date" class="java.util.Date"/> -->
+     <bean id="clazz" class="com.ioc.bean.Clazz"/>
+    <bean id="stu" class="com.ioc.bean.Student">
+        <property name="stuNum" value="1001"/>
+        <property name="stuName" value="夏明"/>
+        <property name="stuGender" value="女"/>
+        <property name="stuAge" value="18"/>
+       <!-- <property name="enterenceTime" ref="date"/> -->
+        <property name="enterenceTime">
+            <bean class="java.util.Date"/>
+        </property>
+
+
+        <!--自定义对象类型-->
+        <property name="clazz">
+            <bean class="com.ioc.bean.Clazz">
+                <property name="classId" value="1314"/>
+                <property name="className" value="java1班"/>
+            </bean>
+        </property>
+
+       <!-- 集合类型-->
+        <property name="hobbies" value="java"/>
+
+        <property name="sets">
+        <!-- <property name="sets" ref="clazz"> -->
+            <list>
+                <bean class="com.ioc.bean.Clazz">
+                    <property name="classId" value="520"/>
+                    <property name="className" value="java2班"/>
+                </bean>
+            </list>
+        </property>
+
+        <property name="maps">
+            <map>
+                <entry key="a" value="1314520"/>
+            </map>
+        </property>
+    </bean>
+                     <!--构造器注入
+     <bean id="clazz" class="com.ioc.bean.Clazz"/>
+    <bean id="date" class="java.util.Date"/>
+
+    <bean id="stu" class="com.ioc.bean.Student">
+        <constructor-arg index="0" value="1001"/>             字符串类型
+        <constructor-arg index="1" value="夏明"/>
+        <constructor-arg index="2" value="女"/>
+        <constructor-arg index="3" value="19"/>                简单类型
+        <constructor-arg index="4" ref="date"/>                日期类型
+        <constructor-arg index="5" ref="clazz"/>               自定义类对象类型
+    </bean>
+    <bean id="stu1" class="com.ioc.bean.Student">
+        <constructor-arg index="0">
+            <list>
+                <value>1</value>
+            </list>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <set>
+                <value>a</value>
+            </set>
+        </constructor-arg>
+        <constructor-arg index="2">
+            <map>
+                <entry key="a" value="1314520"/>
+            </map>
+        </constructor-arg>
+    </bean>
+    -->
+
+</beans>
