@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:aop="http://www.springframework.org/schema/aop"
+        xmlns:tx="http://www.springframework.org/schema/tx"
+        xsi:schemaLocation="http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd">
+
+        <context:annotation-config/>
+        <context:component-scan base-package="com"/>
+
+        <context:property-placeholder location="classpath:druid.properties"/>
+
+        <bean id="druidDataSource" class="com.alibaba.druid.pool.DruidDataSource">
+            <property name="driverClassName" value="${druid.driver}"/>
+            <property name="url" value="${druid.url}"/>
+            <property name="username" value="${druid.username}"/>
+            <property name="password" value="${druid.password}"/>
+
+            <property name="initialSize" value="1"/>
+            <property name="minIdle" value="3"/>
+            <property name="maxActive" value="20"/>
+            <property name="maxWait" value="30000"/>
+        </bean>
+
+        <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+            <!--配置数据源-->
+            <property name="dataSource" ref="druidDataSource"/>
+            <!--配置Mapper文件路径-->
+            <property name="mapperLocations" value="classpath:mappers/*Mapper.xml"/>
+            <!--配置需要定义别名-->
+            <property name="typeAliasesPackage" value="com.pojo"/>
+            <!--配置MyBatis在=主配置文件-->
+            <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        </bean>
+
+        <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+            <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+            <property name="basePackage" value="com.dao"/>
+        </bean>
+
+        <!--将Spring提供的事务管理配置给Spring容器-->
+        <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+            <property name="dataSource" ref="druidDataSource"/>
+        </bean>
+        <!--通过Spring jdbc提供的tx标签，声明事务管理策略-->
+        <tx:advice id="txAdvice" transaction-manager="transactionManager">
+            <tx:attributes>
+                <tx:method name="insert" isolation="REPEATABLE_READ" propagation="REQUIRED"/>
+                <tx:method name="delete" isolation="REPEATABLE_READ" propagation="REQUIRED"/>
+                <tx:method name="update" isolation="REPEATABLE_READ" propagation="REQUIRED"/>
+                <tx:method name="query" isolation="REPEATABLE_READ" propagation="SUPPORTS"/>
+            </tx:attributes>
+        </tx:advice>
+        <!--将事务管理策略以AOP配置，应用于DAO操作方法-->
+        <aop:config>
+            <aop:pointcut id="crud" expression="execution(* com.service.*.*(..))"/>
+            <aop:advisor advice-ref="txAdvice" pointcut-ref="crud"/>
+        </aop:config>
+
+</beans>

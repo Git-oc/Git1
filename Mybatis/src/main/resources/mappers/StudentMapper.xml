@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--mapper文件相当于DAO接口的“实现类”，namespace属性要指定“DAO接口的全限定名”-->
+<mapper namespace="com.dao.StudentDAO">
+    <!--增加-->
+    <insert id="insertStudent" useGeneratedKeys="true" keyProperty="stuId">
+        insert into tb_students(stu_num, stu_name, stu_gender, stu_age)
+        values(#{stuNum},#{stuName},#{stuGender},#{stuAge})
+    </insert>
+    <!--删除-->
+    <delete id="deleteStudent">
+        delete from tb_students where stu_num=#{stuNum}
+    </delete>
+    <!--修改-->
+    <update id="updateStudent">
+        update tb_students
+        set stu_name=#{stuName}, stu_gender=#{stuGender}, stu_age=#{stuAge}
+        where stu_num=#{stuNum}
+    </update>
+    <!--查询-->
+    <!--第一种方案，取别名-->
+    <!--
+    <select id="listStudents" resultType="com.pojo.Student">
+        select sid stuId,stu_num stuNum,stu_name stuName,stu_gender stuGender,stu_age stuAge
+        from tb_students
+    </select>
+    -->
+    <!--第二种方案，定义实体类与数据表的映射关系-->
+    <resultMap id="studentMap" type="Student">
+        <id column="sid" property="stuId"/>
+        <result column="stu_num" property="stuNum"/>
+        <result column="stu_name" property="stuName"/>
+        <result column="stu_gender" property="stuGender"/>
+        <result column="stu_age" property="stuAge"/>
+    </resultMap>
+    <!--resultType 指定查询结果封装的对象的实体类-->
+    <!--resultSets 指定当前操作返回的集合类型（可省略）-->
+    <!--resultMap 用于定义实体类与数据表的映射关系（ORM）-->
+    <select id="listStudents" resultMap="studentMap">
+        select sid,stu_num,stu_name,stu_gender,stu_age
+        from tb_students
+    </select>
+    <select id="queryStudent" resultMap="studentMap">
+        select sid,stu_num,stu_name,stu_gender,stu_age
+        from tb_students
+        where stu_num=#{stuNum}
+    </select>
+
+</mapper>

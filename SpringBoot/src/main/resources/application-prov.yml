@@ -1,0 +1,39 @@
+#配置端口号及路径
+server:
+  port: 1212
+  servlet:
+    context-path: /
+
+#查看sql语句
+picPath: F:\xxx\yyy\
+
+aliyun:
+  name: OYear
+  age: 18
+
+logging:
+  level:
+    com.springboot.mapper: debug
+
+#mybstis配置
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.springboot.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+#连接SQL信息
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql:///companydb?serverTimezone=UTC
+    username: root
+    password: x196414.
+    type: com.alibaba.druid.pool.DruidDataSource
+
+#视图的前缀和后缀
+  mvc:
+    view:
+      prefix: /WEB-INF/
+      suffix: .jsp
+
