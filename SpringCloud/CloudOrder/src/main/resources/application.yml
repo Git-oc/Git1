@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: CloudOrder
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: x196414.
+      url: jdbc:mysql://localhost:3306/cloud
+      max-active: 40
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+        namespace: pro
+        group: DEFAULT_GROUP
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:1212
+      eager: true
+      web-context-unify: false
+  zipkin:
+    base-url: http://localhost:1210
+    discovery-client-enabled: false
+    sleuth:
+      sampler:
+        rate: 100
+server:
+  port: 1213
+ribbon:
+  eager-load:
+    enabled: true
+    clients:
+      - CloudJiFen
+      - CloudGoods
+feign:
+  client:
+    config:
+      CloudJiFen:
+        connect-timeout: 10000
+        read-timeout: 10000
+      default:
+        connect-timeout: 10000
+        read-timeout: 10000
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

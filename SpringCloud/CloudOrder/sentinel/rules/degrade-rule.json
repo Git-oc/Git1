@@ -1,0 +1,1 @@
+[{"count":1.0,"grade":2,"limitApp":"default","minRequestAmount":1,"resource":"sentinel6","slowRatioThreshold":1.0,"statIntervalMs":1000,"timeWindow":10}]

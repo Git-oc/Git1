@@ -1,0 +1,113 @@
+spring:
+  application:
+    name: CloudGoods
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: x196414.
+      url: jdbc:mysql://localhost:3306/cloud
+      max-active: 40
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+        namespace: pro
+        group: DEFAULT_GROUP
+    config:
+      import:
+        - optional:nacos:seata-client.yml
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:1212
+      eager: true
+      web-context-unify: false
+  zipkin:
+    base-url: http://localhost:1210
+    discovery-client-enabled: false
+  sleuth:
+    sampler:
+      rate: 100
+server:
+  port: 1211
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+seata:
+  enabled: true
+  service:
+    vgroup-mapping:
+      default_tx_group: default
+  enable-auto-data-source-proxy: true
+  config:
+    nacos:
+      server-addr: localhost:8848
+      group: DEFAULT_GROUP
+      namespace: seata
+      username: nacos
+      password: nacos
+      data-id: seata-server.yml
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: localhost:8848
+      group: DEFAULT_GROUP
+      namespace: seata
+      username: nacos
+      password: nacos
+
+#      datasource:
+#        flow:
+#          nacos:
+#            server-addr: ${nacos.server-addr}
+#            username: ${nacos.username}
+#            password: ${nacos.password}
+#            namespace: ${nacos.namespace}
+#            dataId: ${spring.application.name}-flow-rules
+#            groupId: SENTINEL_GROUP
+#            rule-type: flow
+#        degrade:
+#          nacos:
+#            server-addr: ${nacos.server-addr}
+#            username: ${nacos.username}
+#            password: ${nacos.password}
+#            namespace: ${nacos.namespace}
+#            dataId: ${spring.application.name}-flow-rules
+#            groupId: SENTINEL_GROUP
+#            rule-type: degrade
+#        system:
+#          nacos:
+#            server-addr: ${nacos.server-addr}
+#            username: ${nacos.username}
+#            password: ${nacos.password}
+#            namespace: ${nacos.namespace}
+#            dataId: ${spring.application.name}-flow-rules
+#            groupId: SENTINEL_GROUP
+#            rule-type: system
+#        authority:
+#          nacos:
+#            server-addr: ${nacos.server-addr}
+#            username: ${nacos.username}
+#            password: ${nacos.password}
+#            namespace: ${nacos.namespace}
+#            dataId: ${spring.application.name}-flow-rules
+#            groupId: SENTINEL_GROUP
+#            rule-type: authority
+#        param-flow:
+#          nacos:
+#            server-addr: ${nacos.server-addr}
+#            username: ${nacos.username}
+#            password: ${nacos.password}
+#            namespace: ${nacos.namespace}
+#            dataId: ${spring.application.name}-flow-rules
+#            groupId: SENTINEL_GROUP
+#            rule-type: param-flow
+#nacos:
+#  server-addr: localhost:8848
+#  username: nacos
+#  password: nacos
+#  namespace: sit

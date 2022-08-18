@@ -1,0 +1,18 @@
+#从配置中心加载配置文件
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+        namespace: pro
+        group: DEFAULT_GROUP
+        username: nacos
+        password: nacos
+        #文件名由公式拼接 ${prefix}-${spring.profiles.active}.${file-extension}
+        prefix: CloudJiFen
+        file-extension: yml
+        shared-configs:   #加载共享配置文件
+          - common.yml
+        shared-dataids: common.yml    #指定配置文件，支持动态刷新
+  profiles:
+    active: pro
